@@ -26,9 +26,16 @@ jobs:
         args: --sarif-file-out=snyk.sarif
     - name: Upload Result to GitHub code Scanning
       uses: github/codeql-action/upload-sarif@v1
+      continue-on-error: true
       with:
         sarif_file: snyk.sarif
-        
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifacts@v3.0.0
+      continue-on-error: true
+      with:
+        path:
+          BNTEST
+          setup.py
   # This workflow contains a single job called "build"
   #build:
     # The type of runner that the job will run on
