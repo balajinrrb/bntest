@@ -68,12 +68,3 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-      
-    - name: Archive Artifacts
-      uses: actions/upload-artifacts@v3
-      with:
-        name: Pactage
-        working-directory: BNTEST
-        path: |
-          BNTEST
-          setup.py
