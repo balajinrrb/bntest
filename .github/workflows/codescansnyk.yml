@@ -17,6 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run Snyk to check for vulnerabilities
+      working-directory: BNTEST
       uses: snyk/actions/python-3.8@master
       continue-on-error: true
       env:
