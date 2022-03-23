@@ -1,5 +1,4 @@
 name: Python Package Build
-author: Balaji N
 
 on:
   push:
@@ -39,7 +38,7 @@ jobs:
   job2:
     name: Snyk Code Scanning
     runs-on: ubuntu-latest
-    need: job1
+    needs: job1
 
     steps:
     - name: Checout Repository
@@ -63,7 +62,7 @@ jobs:
     name: Publish Artifact
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    need: [job1, job2]
+    needs: [job1, job2]
 
     steps:
     - name: Checkout Repository
