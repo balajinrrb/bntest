@@ -94,8 +94,9 @@ jobs:
         name: BNTEST Package
 
     - name: Build Project
-      run: |
-        zip --junk-paths BNTEST Package
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: bntest-package.zip
     
     - name: Create Release
       id: bntest_release
