@@ -1,36 +1,79 @@
-# This is a basic workflow to help you get started with Actions
+name: Python Package Build
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main, develop]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  archive-build-artifacts:
-    # The type of runner that the job will run on
+  job1:
+    name: CodeQL Scanning
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          name: BNTEST Package Artifact
-          path: |
-            BNTEST
-            setup.py
-          if-no-files-found: error 
-          retention-days: 5
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with: 
+        languages: ${{ matrix.language }}
+    
+    - name: AutoBuild
+      uses: github/codeql-action/autobuild@v1
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
+
+  job2:
+    name: Snyk Code Scanning
+    runs-on: ubuntu-latest
+    needs: job1
+
+    steps:
+    - name: Checout Repository
+      uses: action/checkout@v2
+
+    - name: Run Snyk to Check for Vulerabilities
+      uses: snyk/actions/python-3.8@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --sarif-file-out=snyk.sarif
+
+    - name: Upload Result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v1
+      continue-on-error: true
+      with:
+        sarif_file: snyk.sarif
+
+  job3:
+    name: Publish Artifact
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [job1, job2]
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    
+    - name: Upload a Build Artifacts
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: BNTEST Package
+        path: |
+          BNTEST
+          setup.py
+        if-no-file-found: error
+        retention-days: 1
