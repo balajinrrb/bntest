@@ -81,6 +81,7 @@ jobs:
   job4:
     name: Relaseing the Assest
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: job3
 
     steps:
