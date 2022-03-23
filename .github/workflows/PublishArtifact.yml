@@ -111,7 +111,7 @@ jobs:
       id: bntest-upload-assest
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.bntest_release.output.upload_url }}
         assest_path: ./bntest-package.zip
