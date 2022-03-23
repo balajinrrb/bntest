@@ -115,7 +115,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ steps.bntest_release.outputs.upload_url }}
         assest_path: ./bntest-package.zip
         assest_name: bntest-packagev${{ github.run_number }}.zip
         assest_content_type: application/zip
