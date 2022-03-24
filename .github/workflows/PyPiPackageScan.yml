@@ -8,8 +8,17 @@ on:
 
 jobs:
   job1:
-    name: Snyk Code Scanning
+    name: Curl PyPI Package
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
 
     steps:
     - name: Checkout Repository
@@ -19,17 +28,56 @@ jobs:
       run: |
         curl -L -O https://files.pythonhosted.org/packages/af/e8/894c71e914dfbe01276a42dfad40025cd96119f2eefc39c554b6e8b9df86/setuptools-60.10.0.tar.gz
         tar -xvf setuptools-60.10.0.tar.gz
-
-    - name: Run Snyk to Check for Vulerabilities
-      uses: snyk/actions/python-3.8@master
-      continue-on-error: true
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        args: --sarif-file-out=snyk.sarif
     
-    - name: Upload Result to GitHub Code Scanning
-      uses: github/codeql-action/upload-sarif@v1
-      continue-on-error: true
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
       with:
-        sarif_file: snyk.sarif      
+        languages: ${{ matrix.language }}
+      
+    - name: Auto Build
+      uses: github/codeql-action/autobuild@v1
+
+    - name: Perform CodeQL- Analysis
+      uses: github/codeql-action/analyze@v1
+
+    - name: Upload a Build Artifacts
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: BNTEST Package
+        path: |
+          BNTEST
+          setup.py
+        if-no-file-found: error
+        retention-days: 1
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: BNTEST Package
+
+    - name: Build Project
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: bntest-package.zip
+    
+    - name: Create Release
+      id: bntest_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Relase V${{ github.run_number }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: bntest-upload-assest
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.bntest_release.outputs.upload_url }}
+        asset_path: ./bntest-package.zip
+        asset_name: bntest-packagev${{ github.run_number }}.zip
+        asset_content_type: application/zip
