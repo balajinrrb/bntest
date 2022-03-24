@@ -8,17 +8,8 @@ on:
 
 jobs:
   job1:
-    name: Curl PyPI Package
+    name: Snyk Code Scanning
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: write
-      security-events: write
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ['python']
 
     steps:
     - name: Checkout Repository
@@ -28,14 +19,17 @@ jobs:
       run: |
         curl -L -O https://files.pythonhosted.org/packages/af/e8/894c71e914dfbe01276a42dfad40025cd96119f2eefc39c554b6e8b9df86/setuptools-60.10.0.tar.gz
         tar -xvf setuptools-60.10.0.tar.gz
-    
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-      
-    - name: Auto Build
-      uses: github/codeql-action/autobuild@v1
 
-    - name: Perform CodeQL- Analysis
-      uses: github/codeql-action/analyze@v1      
+    - name: Run Snyk to Check for Vulerabilities
+      uses: synk/actions/python-3@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --sarif-file-out=snyk.sarif
+    
+    - name: Upload Result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v1
+      continue-on-error: true
+      with:
+        sarif_file: snyk.sarif      
