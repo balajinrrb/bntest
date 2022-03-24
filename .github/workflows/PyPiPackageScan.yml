@@ -45,8 +45,7 @@ jobs:
       with:
         name: BNTEST Package
         path: |
-          BNTEST
-          setup.py
+          setuptools-60.10.0
         if-no-file-found: error
         retention-days: 1
 
