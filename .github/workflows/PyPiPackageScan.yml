@@ -1,0 +1,41 @@
+name: PyPi Package Scan
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  job1:
+    name: Curl PyPI Package
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+  
+    - name: Curl Download PyPI
+      run: |
+        curl -L -O https://files.pythonhosted.org/packages/af/e8/894c71e914dfbe01276a42dfad40025cd96119f2eefc39c554b6e8b9df86/setuptools-60.10.0.tar.gz
+        tar -xvf setuptools-60.10.0.tar.gz
+    
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+      
+    - name: Auto Build
+      uses: github/codeql-action/autobuild@v1
+
+    - name: Perform CodeQL- Analysis
+      uses: github/codeql-action/analyze@v1      
