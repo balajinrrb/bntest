@@ -128,7 +128,7 @@ jobs:
         retention-days: 5
     
     - name: Download Artifact
-      uses: actions/downlaod-artifact@v3
+      uses: actions/download-artifact@v3
       with:
         name: amqp
 
