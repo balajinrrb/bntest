@@ -8,7 +8,7 @@ on:
 
 jobs:
   job1:
-    name: Curl PyPI Package
+    name: Curl PyPI Package alembic
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -85,7 +85,7 @@ jobs:
   job2:
     if: ${{ always }}
     needs: [job1]
-    name: Curl PyPI Packaeg 
+    name: Curl PyPI Packaeg amqp
     runs-on: ubuntu-latest
     permissions:
       actions: write
