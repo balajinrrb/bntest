@@ -24,7 +24,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
   
-    - name: Curl Download PyPI
+    - name: Curl Download PyPI alembic
       run: |
         curl -L -O https://files.pythonhosted.org/packages/2a/78/19c9330d91ea9842c974d01b7e68b8ab0de4429fee371edeb207f4af4151/alembic-1.5.8.tar.gz
         tar -xvf alembic-1.5.8.tar.gz
@@ -101,7 +101,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
   
-    - name: Curl Download PyPI
+    - name: Curl Download PyPI amqp
       run: |
         curl -L -O https://files.pythonhosted.org/packages/37/9f/d54494a157d0dcd1673fe7a1bcce7ac70d3eb6d5d6149749450c87a2c959/amqp-2.6.1.tar.gz
         tar -xvf amqp-2.6.1.tar.gz
