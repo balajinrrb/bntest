@@ -47,6 +47,8 @@ jobs:
         path: |
           alembic-*
           !alembic-1.5.8.tar.gz
+          !.github/**
+          !.git/**
         if-no-file-found: error
         retention-days: 1
 
@@ -124,6 +126,8 @@ jobs:
         path: |
           amqp-*
           !amqp-2.6.1.tar.gz
+          !.github/**
+          !.git/**
         if-no-file-found: error
         retention-days: 1
 
