@@ -26,8 +26,10 @@ jobs:
   
     - name: Curl Download PyPI
       run: |
-        curl -L -O https://files.pythonhosted.org/packages/af/e8/894c71e914dfbe01276a42dfad40025cd96119f2eefc39c554b6e8b9df86/setuptools-60.10.0.tar.gz
-        tar -xvf setuptools-60.10.0.tar.gz
+        curl -L -O https://files.pythonhosted.org/packages/2a/78/19c9330d91ea9842c974d01b7e68b8ab0de4429fee371edeb207f4af4151/alembic-1.5.8.tar.gz
+        tar -xvf alembic-1.5.8.tar.gz
+        # curl -L -O https://files.pythonhosted.org/packages/af/e8/894c71e914dfbe01276a42dfad40025cd96119f2eefc39c554b6e8b9df86/setuptools-60.10.0.tar.gz
+        # tar -xvf setuptools-60.10.0.tar.gz
     
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
@@ -43,21 +45,22 @@ jobs:
     - name: Upload a Build Artifacts
       uses: actions/upload-artifact@v3.0.0
       with:
-        name: BNTEST Package
+        name: alembic
         path: |
-          setuptools-60.10.0
+          alembic-*
+          !alembic-1.5.8.tar.gz
         if-no-file-found: error
         retention-days: 1
 
     - name: Download Artifact
       uses: actions/download-artifact@v3
       with:
-        name: BNTEST Package
+        name: alembic
 
     - name: Build Project
       uses: thedoctor0/zip-release@master
       with:
-        filename: bntest-package.zip
+        filename: alembic-1.5.8.zip
     
     - name: Create Release
       id: bntest_release
@@ -77,6 +80,81 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.bntest_release.outputs.upload_url }}
-        asset_path: ./bntest-package.zip
-        asset_name: bntest-packagev${{ github.run_number }}.zip
+        asset_path: ./alembic-1.5.8.zip
+        asset_name: alembic-1.5.8-${{ github.run_number }}.zip
+        asset_content_type: application/zip
+
+  job2:
+    name: Curl PyPI Packaeg 
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Curl Download PyPI
+      run: |
+        curl -L -O https://files.pythonhosted.org/packages/37/9f/d54494a157d0dcd1673fe7a1bcce7ac70d3eb6d5d6149749450c87a2c959/amqp-2.6.1.tar.gz
+        tar -xvf amqp-2.6.1.tar.gz
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Auto Build
+      uses: github/codeql-action/autobuild@v1
+    
+    - name: Perform CodeQL - Analysis
+      uses: github/codeql-action/analyzer@v1
+
+    - name: Upload a Build Artifcats
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: amqp
+        path: |
+          amqp-*
+          !amqp-2.6.1.tar.gz
+        if-no-file-found: error
+        retention-days: 5
+    
+    - name: Download Artifact
+      uses: actions/downlaod-artifact@v3
+      with:
+        name: amqp
+
+    - name: Build Project
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: amqp-2.6.1.zip
+    
+    - name: Create Release
+      id: bntest_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release V${{ github.run_number }}
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      id: bntest-upload-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.bntest_release.outputs.upload_url }}
+        asset_path: ./amqp-2.6.1.zip
+        asset_name: amqp-2.6.1-v${{ github.run_number }}.zip
         asset_content_type: application/zip
