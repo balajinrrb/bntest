@@ -85,6 +85,8 @@ jobs:
         asset_content_type: application/zip
 
   job2:
+    if: ${{ always }}
+    needs: [job1]
     name: Curl PyPI Packaeg 
     runs-on: ubuntu-latest
     permissions:
