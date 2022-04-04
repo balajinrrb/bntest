@@ -45,10 +45,10 @@ jobs:
       with:
         name: alembic
         path: |
-          alembic-*
-          !alembic-1.5.8.tar.gz
-          !.github/**
-          !.git/**
+          alembic-1.5.8/*
+          !./alembic-1.5.8.tar.gz
+          !./.github/*
+          !./.git/*
         if-no-file-found: error
         retention-days: 1
 
@@ -124,8 +124,10 @@ jobs:
       with:
         name: amqp
         path: |
-          amqp-*
-          !amqp-2.6.1.tar.gz
+          amqp-2.6.1/*
+          !./amqp-2.6.1.tar.gz
+          !./.github/*
+          !./.git/*
         if-no-file-found: error
         retention-days: 1
 
