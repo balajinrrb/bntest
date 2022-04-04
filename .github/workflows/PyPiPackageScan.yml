@@ -68,8 +68,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: Relase V${{ github.run_number }}
+        tag_name: alembic-v${{ github.run_number }}
+        release_name: Relase alembic-V${{ github.run_number }}
         draft: false
         prerelease: false
 
@@ -145,8 +145,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: Relase V${{ github.run_number }}
+        tag_name: amqp-v${{ github.run_number }}
+        release_name: Relase amqp-V${{ github.run_number }}
         draft: false
         prerelease: false
 
