@@ -85,8 +85,8 @@ jobs:
         asset_content_type: application/zip
 
   job2:
-    if: ${{ always }}
-    needs: job1
+    if: ${{ always() }}
+    needs: [job1]
     name: Curl PyPI Packaeg amqp
     runs-on: ubuntu-latest
     permissions:
@@ -126,8 +126,6 @@ jobs:
         path: |
           amqp-*
           !amqp-2.6.1.tar.gz
-          !.github/**
-          !.git/**
         if-no-file-found: error
         retention-days: 1
 
@@ -152,7 +150,7 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Release Assets
+    - name: Upload Release Asset
       id: bntest-upload-assest
       uses: actions/upload-release-asset@v1
       env:
