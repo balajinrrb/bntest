@@ -36,7 +36,7 @@ jobs:
     - name: Run Snyk to Check
       uses: snyk/actions/python-3.6@master
       env:
-        SNYK_TOKEN: ${{ secret.SNYK_TOKEN }}
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         args: --severity-threshold=high
 
