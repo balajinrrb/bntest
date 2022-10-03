@@ -110,7 +110,7 @@ jobs:
         tar -xvf amqp-2.6.1.tar.gz
 
     - name: Run Snyk Checking
-      uses: snyk/actions/python-3.6@mater
+      uses: snyk/actions/python-3.6@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
