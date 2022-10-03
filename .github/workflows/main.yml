@@ -29,7 +29,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Curl Download Alembic PyPI Repo
-      working-directory: /github/workspace
+      working-directory: /temp
       run: |
         curl -L -O https://files.pythonhosted.org/packages/2a/78/19c9330d91ea9842c974d01b7e68b8ab0de4429fee371edeb207f4af4151/alembic-1.5.8.tar.gz
         tar -xvf alembic-1.5.8.tar.gz
@@ -47,9 +47,9 @@ jobs:
         name: alembic
         path: |
           alembic-1.5.8/*
-          !alembic-1.5.8.tar.gz
-          !.github
-          !.git
+          "!alembic-1.5.8.tar.gz"
+          "!.github"
+          "!.git"
         if-no-file-found: error
         retention-days: 1
       
