@@ -13,7 +13,7 @@ on:
 jobs:
   job1:
     name: Alembic
-    runs-on: BNGitHubAgent
+    runs-on: BNGitHubAgent-01
     permissions: 
       actions: write
       contents: write
@@ -89,7 +89,7 @@ jobs:
     #if: ${{ alaways() }}
     #needs: [job1]
     name: AMQP PyPI Scanning
-    runs-on: ubuntu-latest
+    runs-on: BNGitHubAgent-01
     permissions:
       actions: write
       contents: write
