@@ -29,10 +29,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Curl Download Alembic PyPI Repo
-      working-directory: /home/bn/actions-runner/_work/_temp
+      #working-directory: /home/bn/actions-runner/_work/_temp
       run: |
         curl -L -O https://files.pythonhosted.org/packages/2a/78/19c9330d91ea9842c974d01b7e68b8ab0de4429fee371edeb207f4af4151/alembic-1.5.8.tar.gz
-        tar -xvf alembic-1.5.8.tar.gz -C /home/bn/actions-runner/_work/bntest/bntest
+        tar -xvf alembic-1.5.8.tar.gz --strip-components=1
 
     - name: Run Snyk to Check
       uses: snyk/actions/python-3.6@master
@@ -107,7 +107,7 @@ jobs:
     - name: Curl Download AMQP PyPI
       run: |
         curl -L -O https://files.pythonhosted.org/packages/37/9f/d54494a157d0dcd1673fe7a1bcce7ac70d3eb6d5d6149749450c87a2c959/amqp-2.6.1.tar.gz
-        tar -xvf amqp-2.6.1.tar.gz
+        tar -xvf amqp-2.6.1.tar.gz --strip-components=1
 
     - name: Run Snyk Checking
       uses: snyk/actions/python-3.6@master
