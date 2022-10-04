@@ -29,10 +29,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Curl Download Alembic PyPI Repo
-      #working-directory: /temp
+      working-directory: /_temp
       run: |
         curl -L -O https://files.pythonhosted.org/packages/2a/78/19c9330d91ea9842c974d01b7e68b8ab0de4429fee371edeb207f4af4151/alembic-1.5.8.tar.gz
-        tar -xvf alembic-1.5.8.tar.gz -C /github/workspace
+        tar -xvf alembic-1.5.8.tar.gz -C /home/bn/actions-runner/_work/bntest/bntest
 
     - name: Run Snyk to Check
       uses: snyk/actions/python-3.6@master
